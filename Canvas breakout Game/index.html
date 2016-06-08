@@ -2,14 +2,24 @@
 <html>
 <head>
 	<title>Canvas breakout game</title>
+	<meta charset="utf-8">
+	<meta name="" content="">
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<script type="text/javascript" src="js/move-platform.js"></script>
 
 </head>
 <body>
-	<h1>Breakout!</h1>
-	<p class="instructions">Use Left/Right or A/D keys to move <span class="spacebar-instructions">Hit space to shhot the ball!</span></p>
+	<section class="game-container">
+		<h1>Breakout!</h1>
+		<p class="instructions">Use Left/Right or A/D keys to move <span class="spacebar-instructions">Hit space to shoot the ball!</span></p>
 
-	<canvas width="400" height="400" class="canvas">
-		
-	</canvas>
+		<canvas height="400px" width="400px" tabindex="1" id="canvas">
+
+		</canvas>
+	</section>
 </body>
 </html>

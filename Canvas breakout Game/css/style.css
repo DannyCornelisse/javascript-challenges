@@ -1,0 +1,22 @@
+
+h1 {
+	margin: 20px auto;
+	display: block;
+	text-align: center;
+}
+
+.instructions {
+	margin: 20px auto;
+	text-align: center;
+	display: block;
+}
+
+.game-container {
+	width: 100%;
+}
+
+#canvas {
+	border: 1px solid black;
+	display: block;
+	margin:0 auto;
+}
