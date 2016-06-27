@@ -15,8 +15,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	document.addEventListener("keydown", movePlatform);
 
-	createPlatform();
-	createBall();
+	setInterval(drawObjects, 20);
+
+	function drawObjects (){
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		createPlatform();
+		createBall();
+		if(ballShoot === true){
+			moveBall();
+		}
+	}
 	
 	function createPlatform(){
 		ctx.beginPath();
@@ -44,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function(){
 				platformDX = 5;
 			}
 			platformX -= platformDX;
-			ctx.clearRect(platformX, platformY, platformWidth + platformDX,platformHeight);
+			//ctx.clearRect(platformX, platformY, platformWidth + platformDX,platformHeight);
 			createPlatform();
 		}
 
@@ -55,23 +63,30 @@ document.addEventListener('DOMContentLoaded', function(){
 				platformDX = 5;
 			}
 			platformX += platformDX;
-			ctx.clearRect(platformX, platformY, -platformWidth + platformDX, platformHeight);
+			//ctx.clearRect(platformX, platformY, -platformWidth + platformDX, platformHeight);
 			createPlatform();
 		}
 
 		if(key === 32 && ballShoot === false) {
-			ballDX = Math.floor(Math.random() * (10 - -10 + 1)) + -10;
-			ballDY = Math.floor((Math.random() * 10) + 1);
-			setInterval(moveBall,75)
+			ballDX = Math.floor(Math.random() * (6 - -6 + 1)) + -6;
+			ballDY = -4;
+			
 			ballShoot = true;
+
 		}
 
 	}
 
 	function moveBall(){
 		ballX += ballDX;
-		ballY -= ballDY;
-		createBall();
+		ballY += ballDY;
+		if (ballX + ballRadius >= canvas.width || ballX - ballRadius <= 0){
+			ballDX = -ballDX;
+		} 
+		if (ballY - ballRadius <= 0 && ballDY <= 0){
+			ballDY = -ballDY;
+		} //else if (ballD)
+
 
 	}
 
