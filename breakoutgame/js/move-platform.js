@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function(){
 	var ballDX = 0;
 	var ballDY = 0;
 	var ballShoot = false;
+	var brickHeight = 12;
+	var brickWidth = 40;
+	var brickMargin = 12; //all sides
+	var bricks = [];
 
 	document.addEventListener("keydown", movePlatform);
 
@@ -19,17 +23,18 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	function drawObjects (){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		createPlatform();
+		createRect(platformX, platformY, platformWidth, platformHeight, "#003366");
 		createBall();
 		if(ballShoot === true){
 			moveBall();
 		}
+		createRect(20, 20, brickWidth, brickHeight, "#003366");
 	}
 	
-	function createPlatform(){
+	function createRect(X, Y, width, height, color){
 		ctx.beginPath();
-		ctx.fillRect(platformX, platformY, platformWidth, platformHeight);
-		ctx.fillStyle = "#003366";
+		ctx.fillRect(X, Y, width, height);
+		ctx.fillStyle = color;
 		ctx.fill();
     	ctx.closePath();
 	}
@@ -42,124 +47,96 @@ document.addEventListener('DOMContentLoaded', function(){
 		ctx.closePath();
 	}
 
+	function createBrick(brickX, brickY){
+		ctx.beginPath();
+		ctx.fillRect(brickX, brickX, brickWidth, brickHeight);
+		ctx.fillStyle = "#003366";
+		ctx.fill();
+    	ctx.closePath();
+	}
+
 	function movePlatform(event){
 		var key = event.keyCode;
 
 		if (key === 37 || key === 65){
 			if (platformX === 0){
 				platformDX = 0;
+				//move ball along with platfprm when ball isn't moving
+				if (ballShoot === false){
+					ballDX = platformDX;
+					ballX -= ballDX;
+				}
 			} else {
-				platformDX = 5;
+				platformDX = 7;
+				if (ballShoot === false){
+					ballDX = platformDX;
+					ballX -= ballDX;
+				}
 			}
 			platformX -= platformDX;
-			//ctx.clearRect(platformX, platformY, platformWidth + platformDX,platformHeight);
-			createPlatform();
 		}
 
 		if (key === 39 || key === 68){
 			if (platformX + platformWidth === canvas.width){
 				platformDX = 0;
+				if (ballShoot === false){
+					ballDX = platformDX;
+					ballX += ballDX;
+				}
 			} else {
-				platformDX = 5;
+				platformDX = 7;
+				if (ballShoot === false){
+					ballDX = platformDX;
+					ballX += ballDX;
+				}
 			}
 			platformX += platformDX;
-			//ctx.clearRect(platformX, platformY, -platformWidth + platformDX, platformHeight);
-			createPlatform();
 		}
 
-		if(key === 32 && ballShoot === false) {
-			ballDX = Math.floor(Math.random() * (6 - -6 + 1)) + -6;
-			ballDY = -4;
-			
-			ballShoot = true;
-
+		if (key === 32) {
+			if (ballShoot === false) {
+				ballDX = Math.floor(Math.random() * (6 - -6 + 1)) + -6;
+				ballDY = -4;
+				ballShoot = true;
+			} else if (ballShoot === true) {
+				ballX = platformX + platformWidth/2;
+				ballY = platformY - ballRadius;
+				ballDX = 0;
+				ballDY = 0;
+				ballShoot = false;
+			}
 		}
-
 	}
 
 	function moveBall(){
 		ballX += ballDX;
 		ballY += ballDY;
+		//bounce ball against walls
 		if (ballX + ballRadius >= canvas.width || ballX - ballRadius <= 0){
 			ballDX = -ballDX;
 		} 
+		//bounce ball ceiling
 		if (ballY - ballRadius <= 0 && ballDY <= 0){
 			ballDY = -ballDY;
-		} //else if (ballD)
-
-
+		}
+		// bounce ball on platform
+		if (ballY + ballRadius >= platformY 
+			&& ballY + ballRadius <= platformY + platformHeight 
+			&& ballX >= platformX 
+			&& ballX <= platformX + platformWidth){
+			ballDY = - ballDY;
+		}
+		//ball is below platform
+		if (ballY - ballRadius >= platformY + platformHeight) {
+			console.log("game over");
+			ballShoot = false;
+			ballDY = 0;
+			ballDX = 0;
+			// reload ball after 1 second
+			setTimeout(function(){
+				ballX = platformX + platformWidth/2;
+				ballY = platformY - ballRadius;
+			},1000); 
+		}
 	}
-
 }, false);
-
-
-
-
-
-
-
-// function createBall(){
-//     ball = canvas.getContext('2d');
-//     ball.beginPath();
-//     ball.fillStyle="#003366";
-//     ball.radius = 7
-//     ball.startx = platform.x + platform.width/2;
-//     ball.starty = platform.y - ball.radius;
-//     ball.arc(ball.startx, ball.starty, ball.radius, 0 , 2 * Math.PI, true);
-//     ball.fill();
-//     ball.dx = 0;
-//     ball.dy = 0;
-// }
-
-
-
-// function movePlatform(event) {
-// 	var key = event.keyCode;
-// 	//console.log(key);
-
-// 	if (key === 37 || key === 65){
-		
-// 		if (platform.x===0){
-// 				platform.dx = 0;
-// 			} else {
-// 				platform.dx = -5;
-// 				console.log(ball.dx, ball.dy);
-// 			}
-			
-// 		platform.x += platform.dx;
-// 		//console.log(platform.x);
-// 		platform.clearRect(platform.x, platform.y, platform.width-platform.dx ,platform.height);
-// 		platform.fillRect(platform.x, platform.y, platform.width, platform.height);
-		
-// 	}
-
-// 	if (key === 39 || key === 68){
-		
-// 		if (platform.x+platform.width===canvas.width){
-// 			platform.dx = 0;
-// 		} else {
-// 			platform.dx = 5;	
-// 		}
-		
-// 		platform.x += platform.dx;
-// 		platform.fillRect(platform.x, platform.y, platform.width, platform.height);
-// 		platform.clearRect(platform.x, platform.y, -platform.width+platform.dx, platform.height);
-// 	}
-
-// 	if (key===32){
-// 		shootBall();
-// 	} 
-// };
-
-
-// function aimBall(){
-// 	console.log('test');
-
-// }
-// function shootBall(){
-
-// }
-
-// function moveBall(){
-	
-// };
