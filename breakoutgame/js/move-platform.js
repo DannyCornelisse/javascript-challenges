@@ -15,9 +15,31 @@ document.addEventListener('DOMContentLoaded', function(){
 	var brickHeight = 12;
 	var brickWidth = 40;
 	var brickMargin = 12; //all sides
+	var brickXY = [{x:20, y:20}];
+	var brickY = 20;
 	var bricks = [];
 
+
 	document.addEventListener("keydown", movePlatform);
+	(function initBricks (){
+		for (var i = 1; i < 35; i++){
+			var x;
+			var y;
+			var coordinates = {};
+			var row;
+			
+			x = brickXY[i-1].x + brickWidth + brickMargin;
+			y = brickXY[i-1].y;
+			if(brickXY[i-1].x + 2*brickWidth + 2*brickMargin >= canvas.width){
+				y = brickXY[i-1].y + brickHeight + brickMargin;
+				x = 20; 
+			}
+
+			coordinates = {x,y};
+			brickXY.push(coordinates);
+		}
+	})()
+	console.log(brickXY);
 
 	setInterval(drawObjects, 20);
 
@@ -28,7 +50,11 @@ document.addEventListener('DOMContentLoaded', function(){
 		if(ballShoot === true){
 			moveBall();
 		}
-		createRect(20, 20, brickWidth, brickHeight, "#003366");
+		var brickslength = brickXY.length;
+		for (var i = 0; i < brickslength; i++) {
+			createRect(brickXY[i].x, brickXY[i].y, brickWidth, brickHeight, "#003366");
+		}
+		
 	}
 	
 	function createRect(X, Y, width, height, color){
@@ -45,14 +71,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		ctx.fillStyle="#003366";
 		ctx.fill();
 		ctx.closePath();
-	}
-
-	function createBrick(brickX, brickY){
-		ctx.beginPath();
-		ctx.fillRect(brickX, brickX, brickWidth, brickHeight);
-		ctx.fillStyle = "#003366";
-		ctx.fill();
-    	ctx.closePath();
 	}
 
 	function movePlatform(event){
