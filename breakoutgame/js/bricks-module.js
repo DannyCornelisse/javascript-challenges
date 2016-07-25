@@ -7,11 +7,11 @@ var bricks = (function(){
 
 	var myObject = {};
 
-	var calcBricksCoordinates = (function (){
+	myObject.calcBricksCoordinates = (function (){
 		for (var i = 1; i < bricksNumber; i++){
-			var x;
-			var y;
-			var coordinates = {};
+			var x,
+				y,
+				coordinates = {};
 			
 			x = brickCoordinates[i-1].x + brickWidth + brickMargin;
 			y = brickCoordinates[i-1].y;
@@ -23,9 +23,12 @@ var bricks = (function(){
 			brickCoordinates.push(coordinates);
 		}
 		//return brickNumber = brickCoordinates.length;
-	})()
+	})();
+
+	// TODO check if ball touches a brick, then remove coordinates
 
 	myObject.draw = function(){
+
 		for (var i = 0; i < bricksNumber; i++) {
 			canvas.ctx.beginPath();
 			canvas.ctx.fillRect(brickCoordinates[i].x, brickCoordinates[i].y, brickWidth, brickHeight);
@@ -37,9 +40,9 @@ var bricks = (function(){
 	}
 
 	return myObject;
-})()
+})();
 
-bricks.draw();
+// bricks.draw();
 
 // var ballShoot = false;
 // var brickHeight = 12;

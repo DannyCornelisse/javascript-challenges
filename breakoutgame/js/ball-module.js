@@ -7,15 +7,15 @@ var ball = (function(){
 
 	var myObject = {}
 
-	myObject.ballShoot = false;
+	myObject.fired = false;
 
 	myObject.x = initX;
 
 	myObject.y = initY;
 
-	myObject.dx = 0;
+	myObject.dx;
 
-	myObject.dy = 0;
+	myObject.dy;
 
 	myObject.draw = function(){
 		canvas.ctx.beginPath();
@@ -25,22 +25,43 @@ var ball = (function(){
 		canvas.ctx.closePath();
 	}
 
+	myObject.fireBall = function(){
+		console.log('test');
+	}
+
+	myObject.updateX = function(){
+		myObject.x += myObject.dx;
+	}
+
+	myObject.updateY = function(){
+		myObject.y += myObject.dy;
+	}
+
+	myObject.updateXY = function(){
+		myObject.updateY();
+		myObject.updateX();
+	}
+
+	myObject.fire = function(){
+
+		if (myObject.fired){
+			myObject.updateXY();
+		} 
+		// else if (myObject.fired === false){
+		// 	myObject.dy = 0;
+		// 	myObject.dx = 0;
+		// 	myObject.updateXY();
+		// }
+	}
+
+	myObject.reload = function(){
+		
+		myObject.dx = 0;
+		myObject.dy = 0;
+		myObject.x = initX;
+		myObject.y = initY;
+
+	}
+
 	return myObject;
 })()
-
-ball.draw();
-
-// var ballRadius = 7;
-// var ballX = platformX + platformWidth/2;
-// var ballY = platformY - ballRadius;
-// var ballDX = 0;
-// // var ballDY = 0;
-// // var ballShoot = false;
-
-// 	function createBall(){
-// 		ctx.beginPath();
-// 		ctx.arc(ballX, ballY - 1, ballRadius, 0 , 2 * Math.PI, true);
-// 		ctx.fillStyle="#003366";
-// 		ctx.fill();
-// 		ctx.closePath();
-// 	}
